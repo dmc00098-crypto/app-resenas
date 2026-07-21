@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReputaciónPro | Gestión de Reseñas con IA</title>
+    <!-- Tailwind CSS desde CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col justify-between antialiased">
+
+    <!-- Navegación Superior limpia -->
+    <header class="bg-white border-b border-slate-200 py-4 px-6">
+        <div class="max-w-4xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-slate-900 text-white rounded-lg flex items-center justify-center font-bold text-sm">
+                    RP
+                </div>
+                <span class="font-semibold text-slate-900 tracking-tight text-lg">ReputaciónPro</span>
+            </div>
+            <span class="text-xs font-medium bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full border border-slate-200">
+                Hostelería & Comercio
+            </span>
+        </div>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="max-w-4xl mx-auto w-full px-4 py-8 sm:py-12 flex-grow">
+        
+        <div class="text-center max-w-xl mx-auto mb-10">
+            <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+                Generador de respuestas a reseñas
+            </h1>
+            <p class="text-slate-600 text-sm mt-2">
+                Redacta respuestas personalizadas, empáticas y profesionales para Google Maps y TripAdvisor en segundos.
+            </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-6 items-start">
+            
+            <!-- Columna Izquierda: Formulario de Entrada -->
+            <div class="bg-white border border-slate-200 rounded-xl p-5 sm:p-6 shadow-sm">
+                <h2 class="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">
+                    1. Datos de la reseña
+                </h2>
+
+                <div class="space-y-4">
+                    <!-- Selector de Tono -->
+                    <div>
+                        <label for="tono" class="block text-xs font-medium text-slate-700 mb-1">
+                            Tono de la respuesta
+                        </label>
+                        <select id="tono" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2.5 text-sm text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition">
+                            <option value="Cercano, agradecido y cordial">Cercano y Agradecido (Para 4 y 5 estrellas)</option>
+                            <option value="Empático, profesional y resolutivo">Empático y Profesional (Para críticas o quejas realistas)</option>
+                            <option value="Educado, institucional y firme">Educado pero Firme (Para clientes injustos o falsas reseñas)</option>
+                        </select>
+                    </div>
+
+                    <!-- Caja para pegar la Reseña -->
+                    <div>
+                        <label for="resena" class="block text-xs font-medium text-slate-700 mb-1">
+                            Reseña del cliente
+                        </label>
+                        <textarea id="resena" rows="5" placeholder="Pega aquí el texto exacto que dejó el cliente en Google Maps..." 
+                            class="w-full bg-slate-50 border border-slate-300 rounded-lg p-3 text-sm text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition resize-none"></textarea>
+                    </div>
+
+                    <!-- Botón Accionador -->
+                    <button id="btn-generar" onclick="generarRespuesta()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-medium text-sm py-2.5 px-4 rounded-lg transition duration-150 shadow-sm flex items-center justify-center gap-2">
+                        <span>Generar respuesta sugerida</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Columna Derecha: Resultado -->
+            <div class="bg-white border border-slate-200 rounded-xl p-5 sm:p-6 shadow-sm flex flex-col justify-between min-h-[340px]">
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-sm font-semibold text-slate-900 uppercase tracking-wider">
+                            2. Respuesta lista para publicar
+                        </h2>
+                        <span id="badge-estado" class="text-xs font-medium px-2 py-0.5 rounded bg-slate-100 text-slate-500 border border-slate-200">
+                            En espera
+                        </span>
+                    </div>
+
+                    <!-- Cuadro de Texto de Salida -->
+                    <div id="resultado" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-4 text-slate-700 min-h-[180px] text-sm leading-relaxed whitespace-pre-line">
+                        El borrador generado por la IA aparecerá aquí...
+                    </div>
+                </div>
+
+                <!-- Acciones del Resultado -->
+                <div class="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between">
+                    <span id="contador-palabras" class="text-xs text-slate-400">0 palabras</span>
+                    
+                    <button onclick="copiarTexto()" id="btn-copiar" class="bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 font-medium text-xs px-3 py-2 rounded-md transition flex items-center gap-1.5 shadow-sm">
+                        Copiar texto
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Pie de página discreto -->
+    <footer class="border-t border-slate-200 bg-white py-4 px-6 text-center text-xs text-slate-500">
+        ReputaciónPro &copy; 2026 — Herramienta de gestión para hostelería y comercios.
+    </footer>
+
+    <script>
+        async function generarRespuesta() {
+            const resena = document.getElementById('resena').value;
+            const tono = document.getElementById('tono').value;
+            const resultadoDiv = document.getElementById('resultado');
+            const btnGenerar = document.getElementById('btn-generar');
+            const badgeEstado = document.getElementById('badge-estado');
+            const contadorPalabras = document.getElementById('contador-palabras');
+
+            if (!resena.trim()) {
+                alert('Por favor, introduce el texto de la reseña.');
+                return;
+            }
+
+            // Estado de Carga
+            btnGenerar.disabled = true;
+            btnGenerar.classList.add('opacity-75', 'cursor-not-allowed');
+            btnGenerar.innerText = 'Procesando respuesta...';
+            
+            resultadoDiv.innerText = "Redactando borrador...";
+            resultadoDiv.classList.add('text-slate-400', 'italic');
+            
+            badgeEstado.innerText = "Generando...";
+            badgeEstado.className = "text-xs font-medium px-2 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-200";
+
+            try {
+                const response = await fetch('http://localhost:3000/api/responder', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ resena, tono })
+                });
+
+                const data = await response.json();
+
+                if (data.respuesta) {
+                    resultadoDiv.innerText = data.respuesta;
+                    resultadoDiv.classList.remove('text-slate-400', 'italic');
+                    resultadoDiv.classList.add('text-slate-800');
+                    
+                    badgeEstado.innerText = "Listo";
+                    badgeEstado.className = "text-xs font-medium px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200";
+
+                    // Contar palabras
+                    const numPalabras = data.respuesta.trim().split(/\s+/).length;
+                    contadorPalabras.innerText = `${numPalabras} palabras`;
+                } else {
+                    resultadoDiv.innerText = "Error: " + (data.error || "No se pudo generar.");
+                    badgeEstado.innerText = "Error";
+                    badgeEstado.className = "text-xs font-medium px-2 py-0.5 rounded bg-red-50 text-red-700 border border-red-200";
+                }
+            } catch (error) {
+                resultadoDiv.innerText = "Error de conexión con el servidor. Verifica que 'node server.js' esté en ejecución.";
+                badgeEstado.innerText = "Desconectado";
+                badgeEstado.className = "text-xs font-medium px-2 py-0.5 rounded bg-red-50 text-red-700 border border-red-200";
+            } finally {
+                // Restaurar Botón
+                btnGenerar.disabled = false;
+                btnGenerar.classList.remove('opacity-75', 'cursor-not-allowed');
+                btnGenerar.innerText = 'Generar respuesta sugerida';
+            }
+        }
+
+        function copiarTexto() {
+            const texto = document.getElementById('resultado').innerText;
+            const btnCopiar = document.getElementById('btn-copiar');
+
+            if (!texto || texto.includes("Aparecerá aquí") || texto.includes("Redactando")) {
+                alert("Genera una respuesta válida antes de copiar.");
+                return;
+            }
+
+            navigator.clipboard.writeText(texto);
+            
+            // Confirmación visual
+            const textoOriginal = btnCopiar.innerText;
+            btnCopiar.innerText = "¡Copiado!";
+            btnCopiar.classList.add('bg-emerald-50', 'text-emerald-700', 'border-emerald-300');
+
+            setTimeout(() => {
+                btnCopiar.innerText = textoOriginal;
+                btnCopiar.classList.remove('bg-emerald-50', 'text-emerald-700', 'border-emerald-300');
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
