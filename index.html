@@ -142,7 +142,7 @@
             badgeEstado.className = "text-xs font-medium px-2 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-200";
 
             try {
-                const response = await fetch('https://backend-resenas.onrender.com', {
+                const response = await fetch('https://backend-resenas-xyz.onrender.com/api/responder', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ resena, tono })
